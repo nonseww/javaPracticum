@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  */
 public class Cities {
     private ArrayList<City> cityList = new ArrayList<>();
+
     /**
      * При создании объявляет пустой ArrayList.
      * Инициализацию можно провести без параметров, с одним City или с ArrayList<City>.
@@ -24,10 +25,12 @@ public class Cities {
      */
 
     public Cities() {}
+
     public Cities(City city) {
         this();
         this.cityList.add(city);
     }
+
     public Cities(City ...cities) {
         this();
         if (cities != null) {
@@ -50,10 +53,11 @@ public class Cities {
                 .orElse(null);
     }
 
-//    public ArrayList<City> find(int temperature) {
-//        return cityList.stream()
-//                .filter(city -> Objects.equals(city.getTemperature(), temperature));
-//    }
+    public ArrayList<City> find(int temperature) {
+        return cityList.parallelStream()
+                .filter(city -> city.getTemperature() == temperature)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     @Override
     public String toString() {
