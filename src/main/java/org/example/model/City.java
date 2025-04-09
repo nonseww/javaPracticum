@@ -41,9 +41,13 @@ public class City {
         }
     }
 
+    private String formatName(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+    }
+
     public City(String name) {
         validateName(name);
-        this.name = name;
+        this.name = formatName(name);
         initTemperature();
     }
 
