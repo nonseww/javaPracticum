@@ -11,19 +11,17 @@ import java.util.stream.Collectors;
  * Класс представляет собой список объектов класса City.
  * Полностью инкапсулирует логику сохранения нового объекта-города,
  * его поиск (для исключения дублирования), удаления и получения
- * необходимой информации
+ * необходимой информации как по одному городу, так и по выборке по некоторому критерию
  */
 public class Cities {
     private ArrayList<City> cityList = new ArrayList<>();
     /**
      * При создании объявляет пустой ArrayList.
      * Инициализацию можно провести без параметров, с одним City или с ArrayList<City>.
+     * @see #getAllCities возвращает cityList - список всех объектов City
+     * @see #find(String) возвращает объект City с указанным названием города
+     * @see #formatCityInfo(City) возвращает отформатированный вывод для объекта City
      */
-
-
-    private ArrayList<City> getAllCities() {
-        return cityList;
-    }
 
     public Cities() {}
     public Cities(City city) {
@@ -37,6 +35,14 @@ public class Cities {
         }
     }
 
+    private ArrayList<City> getAllCities() {
+        return cityList;
+    }
+
+    private String formatCityInfo(City city) {
+        return String.format("Город %s, температура сейчас %d°C", city.getName(), city.getTemperature());
+    }
+
     public City find(String name) {
         return cityList.stream()
                 .filter(city -> Objects.equals(city.getName(), name))
@@ -48,10 +54,6 @@ public class Cities {
 //        return cityList.stream()
 //                .filter(city -> Objects.equals(city.getTemperature(), temperature));
 //    }
-
-    private String formatCityInfo(City city) {
-        return String.format("Город %s, температура сейчас %d°C", city.getName(), city.getTemperature());
-    }
 
     @Override
     public String toString() {
