@@ -20,8 +20,10 @@ public class Cities {
      * При создании объявляет пустой ArrayList.
      * Инициализацию можно провести без параметров, с одним City или с ArrayList<City>.
      * @see #getAllCities возвращает cityList - список всех объектов City
-     * @see #find(String) возвращает объект City с указанным названием города
      * @see #formatCityInfo(City) возвращает отформатированный вывод для объекта City
+     * @see #find(String) возвращает объект City с указанным названием города
+     * @see #find(int) возвращает ArrayList из объектов City с указанной температурой
+     * @see #add(City...) добавляет один или несколько объектов City в cityList
      */
 
     public Cities() {}
@@ -57,6 +59,10 @@ public class Cities {
         return cityList.parallelStream()
                 .filter(city -> city.getTemperature() == temperature)
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void add(City ...cities) {
+        cityList.addAll(List.of(cities));
     }
 
     @Override
