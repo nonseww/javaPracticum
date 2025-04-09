@@ -1,8 +1,9 @@
-package org.example.model;
+package org.example.model.City;
 
-import org.example.model.exceptions.BlankCityNameException;
-import org.example.model.exceptions.InvalidCityNameException;
-import org.example.model.exceptions.NullCityNameException;
+import org.example.model.City.exceptions.BlankCityNameException;
+import org.example.model.City.exceptions.InvalidCityNameException;
+import org.example.model.City.exceptions.NullCityNameException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -41,7 +42,8 @@ public class City {
         }
     }
 
-    private String formatName(String name) {
+    @org.jetbrains.annotations.NotNull
+    private String formatName(@NotNull String name) {
         return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 
@@ -61,6 +63,6 @@ public class City {
 
     @Override
     public String toString() {
-        return String.format("Город %s, температура сейчас %d°C", name, temperature);
+        return String.format("Город %s, температура сейчас %d°C", getName(), getTemperature());
     }
 }

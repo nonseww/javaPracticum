@@ -1,4 +1,4 @@
-package org.example.model.exceptions;
+package org.example.model.City.exceptions;
 
 public class BlankCityNameException extends CityValidationException {
   public BlankCityNameException() {

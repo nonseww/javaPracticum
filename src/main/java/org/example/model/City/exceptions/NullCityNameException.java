@@ -1,4 +1,4 @@
-package org.example.model.exceptions;
+package org.example.model.City.exceptions;
 
 public class NullCityNameException extends RuntimeException {
     public NullCityNameException() {
