@@ -19,6 +19,7 @@ public class City {
      * name Название города (только русские буквы, не null)
      * temperature Температура в городе
      * @throws NullCityNameException если name == null
+     * @throws BlankCityNameException если name пустой
      * @throws InvalidCityNameException если name состоит не только из русских букв и тире
      */
 
