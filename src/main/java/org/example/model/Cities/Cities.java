@@ -20,31 +20,35 @@ public class Cities {
     /**
      * При создании объявляет пустой ArrayList и HashSet.
      * Инициализацию можно провести без параметров, с одним City или со множеством City.
-     * @see #cityList содержит в себе объекты City
+     * @see #cityList содержит в себе объекты City.
      * @see #existingNames служит для оптимизации поиска дубликатов при добавлении элементов и содержит названия
-     * существующих городов
-     * @see #getAllCities() возвращает cityList - список всех объектов City
-     * @see #formatCityInfo(City) возвращает отформатированный вывод для объекта City
-     * @see #find(String) возвращает объект City с указанным названием города
-     * @see #find(int) возвращает ArrayList из объектов City с указанной температурой
-     * @see #add(City...) добавляет один или несколько объектов City в cityList
+     * существующих городов.
+     * @see #getAllCities() возвращает cityList - список всех объектов City.
+     * @see #formatCityInfo(City) возвращает отформатированный вывод для объекта City.
+     * @see #find(String) возвращает объект City с указанным названием города.
+     * @see #find(int) возвращает ArrayList из объектов City с указанной температурой.
+     * @see #add(City...) добавляет один или несколько объектов City в cityList.
+     * @see #delete(City...) удаляет все объекты City, непосредственно переданные в аргументе. Если объекта нет в
+     * cityList, игнорирует его.
+     * @see #delete(String) удаляет объект City, у которого название совпадает с переданным в аргументе. Если города
+     * с таким названием нет, то игнорирует действие.
      */
 
     public Cities() {}
 
     public Cities(City city) {
         this();
-        this.cityList.add(city);
-        this.existingNames.add(city.getName());
+        cityList.add(city);
+        existingNames.add(city.getName());
     }
 
     public Cities(@NotNull City ...cities) {
         this();
         if (cities.length > 0) {
-            this.cityList.addAll(List.of(cities));
+            cityList.addAll(List.of(cities));
             Arrays.stream(cities)
                     .map(City::getName)
-                    .forEach(this.existingNames::add);
+                    .forEach(existingNames::add);
         }
     }
 
@@ -73,9 +77,22 @@ public class Cities {
         Arrays.stream(cities)
                 .filter(city -> !existingNames.contains(city.getName()))
                 .forEach(city -> {
-                    this.cityList.add(city);
-                    this.existingNames.add(city.getName());
+                    cityList.add(city);
+                    existingNames.add(city.getName());
                 });
+    }
+
+    public void delete(@NotNull City ...cities) {
+        Arrays.stream(cities)
+                .filter(city -> cityList.contains(city))
+                .forEach(city -> {
+                    cityList.remove(city);
+                    existingNames.remove(city.getName());
+                });
+    }
+
+    public void delete(@NotNull String name) {
+        cityList.remove(find(name));
     }
 
     @Override
