@@ -33,6 +33,7 @@ public class Cities {
      * cityList, игнорирует его.
      * @see #delete(String) удаляет объект City, у которого название совпадает с переданным в аргументе. Если города
      * с таким названием нет, то игнорирует действие.
+     * @see #clear() очищает список cityList и existingNames.
      */
 
     public Cities() {}
@@ -100,6 +101,11 @@ public class Cities {
         if (isHere(name)) {
             cityList.remove(find(name));
         }
+    }
+
+    public void clear() {
+        existingNames.clear();
+        cityList.clear();
     }
 
     @Override
