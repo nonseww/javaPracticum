@@ -29,11 +29,13 @@ public class Cities {
      * @see #find(String) возвращает объект City с указанным названием города.
      * @see #find(int) возвращает TreeSet из объектов City с указанной температурой.
      * @see #add(City...) добавляет один или несколько объектов City в cityList.
+     * @see #add(ArrayList) добавляет все объекты City из ArrayList.
      * @see #delete(City...) удаляет все объекты City, непосредственно переданные в аргументе. Если объекта нет в
      * cityList, игнорирует его.
      * @see #delete(String) удаляет объект City, у которого название совпадает с переданным в аргументе. Если города
      * с таким названием нет, то игнорирует действие.
      * @see #clear() очищает список cityList и existingNames.
+     * @see #isEmpty() проверяет список cityList на пустоту.
      */
 
     public Cities() {}
@@ -88,6 +90,15 @@ public class Cities {
                 });
     }
 
+    public void add(@NotNull ArrayList<City> cities) {
+        cities.stream()
+                .filter(city -> !existingNames.contains(city.getName()))
+                .forEach(city -> {
+                    cityList.add(city);
+                    existingNames.add(city.getName());
+                });
+    }
+
     public void delete(@NotNull City ...cities) {
         Arrays.stream(cities)
                 .filter(cityList::contains)
@@ -106,6 +117,10 @@ public class Cities {
     public void clear() {
         existingNames.clear();
         cityList.clear();
+    }
+
+    public boolean isEmpty() {
+        return cityList.isEmpty();
     }
 
     @Override
