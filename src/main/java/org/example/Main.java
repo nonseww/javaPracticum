@@ -59,7 +59,6 @@ public class Main {
                                 System.out.println("Ошибка: Не указаны города!");
                                 break;
                             }
-
                             String[] cityNames = arguments.split("\\s+");
                             Arrays.stream(cityNames).toList()
                                     .forEach(cityName -> cities.add(new City(cityName)));
@@ -70,6 +69,20 @@ public class Main {
                                 System.out.println("Нет городов в списке.");
                             } else {
                                 System.out.println(cities);
+                            }
+                            break;
+                        case("Информация_город"):
+                            if (arguments.isEmpty()) {
+                                System.out.println("Ошибка: Не указаны города!");
+                                break;
+                            }
+                            String cityName = arguments.split("\\s+")[0];
+                            City response = cities.find(cityName);
+                            if (response == null) {
+                                System.out.println("Ошибка: Нет такого города в списке!");
+                            }
+                            else {
+                                System.out.println(cities.find(cityName));
                             }
                             break;
                         case("Закончить"):

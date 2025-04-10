@@ -25,6 +25,7 @@ public class Cities {
      * существующих городов.
      * @see #getAllCities() возвращает cityList - список всех объектов City.
      * @see #formatCityInfo(City) возвращает отформатированный вывод для объекта City.
+     * @see #formatName(String) возвращает отформатированное название города.
      * @see #isHere(String) возвращает true или false в зависимости от того, существует ли город с указанным названием.
      * @see #find(String) возвращает объект City с указанным названием города.
      * @see #find(int) возвращает TreeSet из объектов City с указанной температурой.
@@ -64,13 +65,20 @@ public class Cities {
         return String.format("Город %s, температура сейчас %d°C", city.getName(), city.getTemperature());
     }
 
+    @org.jetbrains.annotations.NotNull
+    private String formatName(@NotNull String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+    }
+
     private boolean isHere(@NotNull String name) {
-        return existingNames.contains(name);
+        String formattedName = formatName(name);
+        return existingNames.contains(formattedName);
     }
 
     public City find(@NotNull String name) {
+        String formattedName = formatName(name);
         return cityList.stream()
-                .filter(city -> Objects.equals(city.getName(), name))
+                .filter(city -> Objects.equals(city.getName(), formattedName))
                 .findFirst()
                 .orElse(null);
     }
@@ -109,8 +117,9 @@ public class Cities {
     }
 
     public void delete(@NotNull String name) {
-        if (isHere(name)) {
-            cityList.remove(find(name));
+        String formattedName = formatName(name);
+        if (isHere(formattedName)) {
+            cityList.remove(find(formattedName));
         }
     }
 
