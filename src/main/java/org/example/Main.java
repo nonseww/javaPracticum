@@ -14,9 +14,8 @@ public class Main {
             City city3 = new City("Питер");
             Cities cities = new Cities(city1);
             cities.add(city2, city3);
-            City city4 = new City("Сар");
-            cities.delete("ааа");
-            cities.delete(city4);
+            City city4 = new City("Астрахань");
+            cities.add(city4);
             System.out.println(cities);
         }
         catch (Exception e) {

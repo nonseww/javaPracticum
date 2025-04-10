@@ -10,22 +10,24 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Класс представляет собой город с указанным названием и случайной температурой в диапазоне от -30°С до 30°С
  */
-public class City {
+public class City implements Comparable<City> {
     private final String name;
     private int temperature;
 
     /**
-     * Создаёт город с указанным названием и случайной температурой в диапазоне от -30°С до 30°С
-     * @see #name Название города (только русские буквы, не null)
-     * @see #temperature Температура в городе
-     * @see #initTemperature() инициализирует температуру случайным значением в диапазоне от -30 до 30 °С
-     * @see #validateName(String) проверяет корректность названия города
-     * @see #formatName(String) возвращает отформатированное название города (первая буква большая, остальные маленькие)
-     * @see #getName() возвращает название города
-     * @see #getTemperature() возвращает температуру в городе
-     * @throws NullCityNameException если name == null
-     * @throws BlankCityNameException если name пустой
-     * @throws InvalidCityNameException если name состоит не только из русских букв и тире
+     * Создаёт город с указанным названием и случайной температурой в диапазоне от -30°С до 30°С.
+     * Класс является Comparable по полю name.
+     * @see #name Название города (только русские буквы, не null).
+     * @see #temperature Температура в городе.
+     * @see #initTemperature() инициализирует температуру случайным значением в диапазоне от -30 до 30 °С.
+     * @see #validateName(String) проверяет корректность названия города.
+     * @see #formatName(String) возвращает отформатированное название города
+     * (первая буква большая, остальные маленькие).
+     * @see #getName() возвращает название города.
+     * @see #getTemperature() возвращает температуру в городе.
+     * @throws NullCityNameException если name == null.
+     * @throws BlankCityNameException если name пустой.
+     * @throws InvalidCityNameException если name состоит не только из русских букв и тире.
      */
 
     public City(String name) {
@@ -68,5 +70,10 @@ public class City {
     @Override
     public String toString() {
         return String.format("Город %s, температура сейчас %d°C", getName(), getTemperature());
+    }
+
+    @Override
+    public int compareTo(City other) {
+        return this.name.compareTo(other.getName());
     }
 }
