@@ -29,14 +29,16 @@ public class Cities {
      * @see #isHere(String) возвращает true или false в зависимости от того, существует ли город с указанным названием.
      * @see #find(String) возвращает объект City с указанным названием города.
      * @see #find(int) возвращает TreeSet из объектов City с указанной температурой.
+     * @see #add(String[]) создаёт по каждому названию города объект City и добавляет его в cityList.
      * @see #add(City...) добавляет один или несколько объектов City в cityList.
      * @see #add(ArrayList) добавляет все объекты City из ArrayList.
      * @see #delete(City...) удаляет все объекты City, непосредственно переданные в аргументе. Если объекта нет в
      * cityList, игнорирует его.
-     * @see #delete(String) удаляет объект City, у которого название совпадает с переданным в аргументе. Если города
+     * @see #delete(String[]) удаляет объекты City, у которого название совпадает с переданным в аргументе. Если города
      * с таким названием нет, то игнорирует действие.
      * @see #clear() очищает список cityList и existingNames.
      * @see #isEmpty() проверяет список cityList на пустоту.
+     * @see #size() возвращает количество объектов City.
      */
 
     public Cities() {}
@@ -89,6 +91,16 @@ public class Cities {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
+    public void add(@NotNull String[] cityNames) {
+        Arrays.stream(cityNames)
+                .filter(cityName -> !existingNames.contains(cityName))
+                .forEach(cityName -> {
+                    String formattedName = formatName(cityName);
+                    cityList.add(new City(formattedName));
+                    existingNames.add(formattedName);
+                });
+    }
+
     public void add(@NotNull City ...cities) {
         Arrays.stream(cities)
                 .filter(city -> !existingNames.contains(city.getName()))
@@ -116,11 +128,15 @@ public class Cities {
                 });
     }
 
-    public void delete(@NotNull String name) {
-        String formattedName = formatName(name);
-        if (isHere(formattedName)) {
-            cityList.remove(find(formattedName));
-        }
+    public void delete(@NotNull String[] names) {
+        Arrays.stream(names)
+                .forEach(cityName -> {
+                    String formattedName = formatName(cityName);
+                    if (isHere(formattedName)) {
+                        cityList.remove(find(formattedName));
+                        existingNames.remove(formattedName);
+                    }
+                });
     }
 
     public void clear() {
@@ -130,6 +146,10 @@ public class Cities {
 
     public boolean isEmpty() {
         return cityList.isEmpty();
+    }
+
+    public int size() {
+        return cityList.size();
     }
 
     @Override

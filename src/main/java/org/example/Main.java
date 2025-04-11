@@ -6,10 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -60,9 +57,9 @@ public class Main {
                                 break;
                             }
                             String[] cityNames = arguments.split("\\s+");
-                            Arrays.stream(cityNames).toList()
-                                    .forEach(cityName -> cities.add(new City(cityName)));
-                            System.out.println("Добавлено городов " + cityNames.length);
+                            int countBefore = cities.size();
+                            cities.add(cityNames);
+                            System.out.println("Добавлено городов " + (cities.size() - countBefore));
                             break;
                         case("Информация"):
                             if (cities.isEmpty()) {
@@ -85,8 +82,39 @@ public class Main {
                                 System.out.println(cities.find(cityName));
                             }
                             break;
+                        case("Информация_по_температуре"):
+                            if (arguments.isBlank()) {
+                                System.out.println("Ошибка: Не указана температура!");
+                                break;
+                            }
+                            int temperature;
+                            try {
+                                temperature = Integer.parseInt(arguments.split("\\s+")[0]);
+                            } catch (NumberFormatException e) {
+                                System.out.println("Ошибка: Введено не число!");
+                                break;
+                            }
+                            TreeSet<City> response1 = cities.find(temperature);
+                            if (response1.isEmpty()) {
+                                System.out.println("Города с указанной температурой не найдены");
+                            }
+                            else {
+                                System.out.println(response1);
+                            }
+                            break;
+                        case("Удалить"):
+                            if (arguments.isEmpty()) {
+                                System.out.println("Ошибка: Не указаны города!");
+                                break;
+                            }
+                            String[] cityNames1 = arguments.split("\\s+");
+                            int countBefore1 = cities.size();
+                            cities.delete(cityNames1);
+                            System.out.println("Удалено городов: " + (countBefore1 - cities.size()));
+                            break;
                         case("Закончить"):
                             isWorking = false;
+                            System.out.println("До свидания! Хорошей вам погоды! :) хихик");
                             break;
                         default:
                             System.out.println("Неизвестная команда!");
