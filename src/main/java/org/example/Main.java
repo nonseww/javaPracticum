@@ -1,14 +1,14 @@
 package org.example;
 
 import org.example.model.Cities.Cities;
+import org.example.model.Cities.exceptions.CityNotFoundException;
+import org.example.model.Cities.exceptions.ZeroArgumentsException;
 import org.example.model.City.City;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
-
 
 public class Main {
     public static void main(String[] args) {
@@ -52,15 +52,16 @@ public class Main {
 
                     switch(command) {
                         case("Добавить"):
-                            if (arguments.isEmpty()) {
-                                System.out.println("Ошибка: Не указаны города!");
+                            try {
+                                String[] cityNames = arguments.split("\\s+");
+                                int countBefore = cities.size();
+                                cities.add(cityNames);
+                                System.out.println("Добавлено городов " + (cities.size() - countBefore));
+                                break;
+                            } catch (ZeroArgumentsException e) {
+                                System.out.println(e.getMessage());
                                 break;
                             }
-                            String[] cityNames = arguments.split("\\s+");
-                            int countBefore = cities.size();
-                            cities.add(cityNames);
-                            System.out.println("Добавлено городов " + (cities.size() - countBefore));
-                            break;
                         case("Информация"):
                             if (cities.isEmpty()) {
                                 System.out.println("Нет городов в списке.");
@@ -69,19 +70,15 @@ public class Main {
                             }
                             break;
                         case("Информация_город"):
-                            if (arguments.isEmpty()) {
-                                System.out.println("Ошибка: Не указаны города!");
+                            try {
+                                String cityName = arguments.split("\\s+")[0];
+                                City response = cities.find(cityName);
+                                System.out.println(cities.find(cityName));
+                                break;
+                            } catch (ZeroArgumentsException | CityNotFoundException e) {
+                                System.out.println(e.getMessage());
                                 break;
                             }
-                            String cityName = arguments.split("\\s+")[0];
-                            City response = cities.find(cityName);
-                            if (response == null) {
-                                System.out.println("Ошибка: Нет такого города в списке!");
-                            }
-                            else {
-                                System.out.println(cities.find(cityName));
-                            }
-                            break;
                         case("Информация_по_температуре"):
                             if (arguments.isBlank()) {
                                 System.out.println("Ошибка: Не указана температура!");
@@ -107,15 +104,16 @@ public class Main {
                             System.out.println("Список городов был успешно очищен.");
                             break;
                         case("Удалить"):
-                            if (arguments.isEmpty()) {
-                                System.out.println("Ошибка: Не указаны города!");
+                            try {
+                                String[] cityNames1 = arguments.split("\\s+");
+                                int countBefore1 = cities.size();
+                                cities.delete(cityNames1);
+                                System.out.println("Удалено городов: " + (countBefore1 - cities.size()));
+                                break;
+                            } catch (ZeroArgumentsException e) {
+                                System.out.println(e.getMessage());
                                 break;
                             }
-                            String[] cityNames1 = arguments.split("\\s+");
-                            int countBefore1 = cities.size();
-                            cities.delete(cityNames1);
-                            System.out.println("Удалено городов: " + (countBefore1 - cities.size()));
-                            break;
                         case("Закончить"):
                             isWorking = false;
                             System.out.println("До свидания! Хорошей вам погоды! :)");
@@ -125,6 +123,7 @@ public class Main {
                             break;
                         default:
                             System.out.println("Неизвестная команда!");
+                            break;
                     }
                 }
             } catch (Exception e) {

@@ -1,6 +1,8 @@
 package org.example.model.Cities;
 
 import com.sun.source.tree.Tree;
+import org.example.model.Cities.exceptions.CityNotFoundException;
+import org.example.model.Cities.exceptions.ZeroArgumentsException;
 import org.example.model.City.City;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +22,8 @@ public class Cities {
     /**
      * При создании объявляет пустой TreeSet и HashSet.
      * Инициализацию можно провести без параметров, с одним City или со множеством City.
-     * @see #cityList содержит в себе объекты City.
-     * @see #existingNames служит для оптимизации поиска дубликатов при добавлении элементов и содержит названия
+     * cityList содержит в себе объекты City.
+     * existingNames служит для оптимизации поиска дубликатов при добавлении элементов и содержит названия
      * существующих городов.
      * @see #getAllCities() возвращает cityList - список всех объектов City.
      * @see #formatCityInfo(City) возвращает отформатированный вывод для объекта City.
@@ -78,7 +80,13 @@ public class Cities {
     }
 
     public City find(@NotNull String name) {
+        if (name.isBlank()) {
+            throw new ZeroArgumentsException();
+        }
         String formattedName = formatName(name);
+        if (!existingNames.contains(formattedName)) {
+            throw new CityNotFoundException();
+        }
         return cityList.stream()
                 .filter(city -> Objects.equals(city.getName(), formattedName))
                 .findFirst()
@@ -92,6 +100,9 @@ public class Cities {
     }
 
     public void add(@NotNull String[] cityNames) {
+        if (cityNames.length == 0 | cityNames[0].isEmpty()) {
+            throw new ZeroArgumentsException();
+        }
         Arrays.stream(cityNames)
                 .filter(cityName -> !existingNames.contains(cityName))
                 .forEach(cityName -> {
@@ -102,6 +113,9 @@ public class Cities {
     }
 
     public void add(@NotNull City ...cities) {
+        if (cities.length == 0) {
+            throw new ZeroArgumentsException();
+        }
         Arrays.stream(cities)
                 .filter(city -> !existingNames.contains(city.getName()))
                 .forEach(city -> {
@@ -111,6 +125,9 @@ public class Cities {
     }
 
     public void add(@NotNull ArrayList<City> cities) {
+        if (cities.isEmpty()) {
+            throw new ZeroArgumentsException();
+        }
         cities.stream()
                 .filter(city -> !existingNames.contains(city.getName()))
                 .forEach(city -> {
@@ -120,6 +137,9 @@ public class Cities {
     }
 
     public void delete(@NotNull City ...cities) {
+        if (cities.length == 0) {
+            throw new ZeroArgumentsException();
+        }
         Arrays.stream(cities)
                 .filter(cityList::contains)
                 .forEach(city -> {
@@ -129,6 +149,9 @@ public class Cities {
     }
 
     public void delete(@NotNull String[] names) {
+        if (names.length == 0 || names[0].isBlank()) {
+            throw new ZeroArgumentsException();
+        }
         Arrays.stream(names)
                 .forEach(cityName -> {
                     String formattedName = formatName(cityName);
