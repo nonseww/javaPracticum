@@ -32,7 +32,7 @@ public class Main {
                     while(scanner.hasNextLine()) {
                         String line = scanner.nextLine();
                         System.out.println(line);
-                        commands.append(line);
+                        commands.append(line.concat("\n"));
                     }
                 }
             }
@@ -102,6 +102,10 @@ public class Main {
                                 System.out.println(response1);
                             }
                             break;
+                        case("Очистить"):
+                            cities.clear();
+                            System.out.println("Список городов был успешно очищен.");
+                            break;
                         case("Удалить"):
                             if (arguments.isEmpty()) {
                                 System.out.println("Ошибка: Не указаны города!");
@@ -114,7 +118,10 @@ public class Main {
                             break;
                         case("Закончить"):
                             isWorking = false;
-                            System.out.println("До свидания! Хорошей вам погоды! :) хихик");
+                            System.out.println("До свидания! Хорошей вам погоды! :)");
+                            break;
+                        case("Команды"):
+                            System.out.println(commands);
                             break;
                         default:
                             System.out.println("Неизвестная команда!");
