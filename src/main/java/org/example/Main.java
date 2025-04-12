@@ -4,6 +4,9 @@ import org.example.model.Cities.Cities;
 import org.example.model.Cities.exceptions.CityNotFoundException;
 import org.example.model.Cities.exceptions.ZeroArgumentsException;
 import org.example.model.City.City;
+import org.example.model.City.exceptions.BlankCityNameException;
+import org.example.model.City.exceptions.InvalidCityNameException;
+import org.example.model.City.exceptions.NullCityNameException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -58,7 +61,8 @@ public class Main {
                                 cities.add(cityNames);
                                 System.out.println("Добавлено городов " + (cities.size() - countBefore));
                                 break;
-                            } catch (ZeroArgumentsException e) {
+                            } catch (ZeroArgumentsException | InvalidCityNameException | NullCityNameException |
+                                     BlankCityNameException e) {
                                 System.out.println(e.getMessage());
                                 break;
                             }
@@ -73,7 +77,7 @@ public class Main {
                             try {
                                 String cityName = arguments.split("\\s+")[0];
                                 City response = cities.find(cityName);
-                                System.out.println(cities.find(cityName));
+                                System.out.println(response);
                                 break;
                             } catch (ZeroArgumentsException | CityNotFoundException e) {
                                 System.out.println(e.getMessage());
@@ -94,8 +98,7 @@ public class Main {
                             TreeSet<City> response1 = cities.find(temperature);
                             if (response1.isEmpty()) {
                                 System.out.println("Города с указанной температурой не найдены");
-                            }
-                            else {
+                            } else {
                                 System.out.println(response1);
                             }
                             break;

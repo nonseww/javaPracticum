@@ -47,9 +47,7 @@ public class City implements Comparable<City> {
 
         if (name.isBlank()) {
             throw new BlankCityNameException();
-        }
-
-        else if (!name.matches("[а-яА-Я- ]+")) {
+        } else if (!name.matches("[а-яА-Я- ]+")) {
             throw new InvalidCityNameException(name);
         }
     }

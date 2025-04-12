@@ -41,6 +41,8 @@ public class Cities {
      * @see #clear() очищает список cityList и existingNames.
      * @see #isEmpty() проверяет список cityList на пустоту.
      * @see #size() возвращает количество объектов City.
+     * @throws CityNotFoundException если при попытке поиска город не был найден.
+     * @throws ZeroArgumentsException когда не было передано аргументов.
      */
 
     public Cities() {}
