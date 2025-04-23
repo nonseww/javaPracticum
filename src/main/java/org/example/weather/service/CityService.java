@@ -2,13 +2,11 @@ package org.example.weather.service;
 
 import org.example.weather.domain.City;
 import org.example.weather.domain.factory.CityFactory;
-import org.example.weather.printer.ConsoleCityPrinter;
 import org.example.weather.repository.CityRepository;
 import org.example.weather.repository.criteria.SearchCriteria;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class CityService {
     private final CityRepository cityRepository;
@@ -39,10 +37,6 @@ public class CityService {
 
     public List<City> getAllCities() {
         return cityRepository.getAllCities();
-    }
-
-    public Optional<City> findCityByName(String name) {
-        return cityRepository.findByName(name);
     }
 
     public List<City> findCitiesByCriteria(SearchCriteria searchCriteria) {

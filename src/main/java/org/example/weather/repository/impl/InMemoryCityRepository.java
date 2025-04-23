@@ -50,13 +50,6 @@ public class InMemoryCityRepository implements CityRepository {
     }
 
     @Override
-    public Optional<City> findByName(@NotNull String name) {
-        return existingCities.stream()
-                .filter(city -> city.getName().equalsIgnoreCase(name))
-                .findFirst();
-    }
-
-    @Override
     public List<City> findByCriteria(@NotNull SearchCriteria criteria) {
         return existingCities.stream()
                 .filter(criteria::test)

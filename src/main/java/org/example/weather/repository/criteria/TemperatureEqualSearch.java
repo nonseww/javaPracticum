@@ -2,10 +2,10 @@ package org.example.weather.repository.criteria;
 
 import org.example.weather.domain.City;
 
-public class TemperatureSearch implements SearchCriteria{
+public class TemperatureEqualSearch implements SearchCriteria{
     private final int temperature;
 
-    public TemperatureSearch(int temperature) {
+    public TemperatureEqualSearch(int temperature) {
         this.temperature = temperature;
     }
 

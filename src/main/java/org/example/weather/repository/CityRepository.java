@@ -12,7 +12,6 @@ public interface CityRepository {
     void clear();
     boolean isEmpty();
     int count();
-    Optional<City> findByName(String name);
     List<City> findByCriteria(SearchCriteria criteria);
     List<City> getAllCities();
     boolean existsByName(String name);
