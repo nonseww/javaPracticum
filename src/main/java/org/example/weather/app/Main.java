@@ -30,10 +30,23 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        String url = "jdbc:postgresql://localhost:5432/weatherdb";
+        String user = "nonseww";
+        String password = "nonseww";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            System.out.println("Подключение к PostgreSQL успешно!");
+        } catch (SQLException e) {
+            System.err.println("Ошибка подключения: " + e.getMessage());
+        }
+
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("data/hello.txt");
             if (inputStream != null) {
                 try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8)) {
