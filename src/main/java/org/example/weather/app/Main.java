@@ -25,7 +25,10 @@ import org.example.weather.printer.ConsoleRepositoryStatusPrinter;
 import org.example.weather.printer.RepositoryStatusPrinter;
 import org.example.weather.repository.CityRepository;
 import org.example.weather.repository.impl.InMemoryCityRepository;
+import org.example.weather.repository.jdbc.JdbcCityRepository;
 import org.example.weather.service.CityService;
+import org.example.weather.service.jdbc.JdbcCityService;
+import org.example.weather.utils.DatabaseInitializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -37,16 +40,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/weatherdb";
-        String user = "nonseww";
-        String password = "nonseww";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("Подключение к PostgreSQL успешно!");
-        } catch (SQLException e) {
-            System.err.println("Ошибка подключения: " + e.getMessage());
-        }
-
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("data/hello.txt");
             if (inputStream != null) {
                 try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8)) {
@@ -62,13 +55,15 @@ public class Main {
             }
 
             try {
+                DatabaseInitializer.initialize(); // инициализация БД
+
                 CityDataValidator cityDataValidator = new CityDataValidator();
                 NameFormatter nameFormatter = new NameFormatter();
                 CityFactory cityFactory = new CityFactory(cityDataValidator, nameFormatter);
-                CityRepository cityRepository = new InMemoryCityRepository();
+                JdbcCityRepository cityRepository = new JdbcCityRepository();
                 TextCityFormatter textCityFormatter  = new TextCityFormatter();
                 CityPrinter cityPrinter = new ConsoleCityPrinter(textCityFormatter);
-                CityService cityService = new CityService(cityRepository, cityFactory);
+                CityService cityService = new JdbcCityService(cityRepository, cityFactory);
                 Printer printer = new ConsolePrinter();
                 TextRepositoryStatusFormatter repositoryStatusFormatter = new TextRepositoryStatusFormatter();
                 RepositoryStatusPrinter repositoryStatusPrinter =
