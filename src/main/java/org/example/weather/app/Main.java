@@ -96,9 +96,4 @@ public class Main {
                 System.out.println(e.getMessage());
             }
     }
-
-    @org.jetbrains.annotations.NotNull
-    private static String formatCommand(@NotNull String command) {
-        return command.substring(0, 1).toUpperCase() + command.substring(1).toLowerCase();
-    }
 }
