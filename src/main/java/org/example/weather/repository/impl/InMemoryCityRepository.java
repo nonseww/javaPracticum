@@ -1,7 +1,6 @@
 package org.example.weather.repository.impl;
 
 import org.example.weather.domain.City;
-import org.example.weather.exception.city.CityValidationException;
 import org.example.weather.exception.cityRepository.CityNotFoundException;
 import org.example.weather.exception.cityRepository.DuplicateCityException;
 import org.example.weather.repository.CityRepository;

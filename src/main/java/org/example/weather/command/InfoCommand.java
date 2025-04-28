@@ -10,7 +10,6 @@ import org.example.weather.repository.specification.OrSpecification;
 import org.example.weather.service.CityService;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Objects;
 

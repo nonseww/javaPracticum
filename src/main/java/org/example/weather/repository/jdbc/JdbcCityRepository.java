@@ -8,6 +8,7 @@ import org.example.weather.utils.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class JdbcCityRepository implements CityRepository {
     @Override
@@ -65,18 +66,19 @@ public class JdbcCityRepository implements CityRepository {
     @Override
     public boolean isEmpty() {
         Connection connection = null;
+        ResultSet resultSet;
         try {
             connection = DatabaseConnection.getConnection();
             try (Statement statement = connection.createStatement();
             ) {
-                ResultSet resultSet = statement.executeQuery("SELECT id FROM city");
-                return resultSet == null;
+                resultSet = statement.executeQuery("SELECT id FROM city");
             }
         } catch(SQLException e) {
             throw new DataAccessException(e.getMessage());
         } finally {
             DatabaseConnection.closeConnection(connection);
         }
+        return resultSet == null;
     }
 
     @Override
@@ -85,8 +87,33 @@ public class JdbcCityRepository implements CityRepository {
     }
 
     @Override
-    public List<City> findByCriteria(SearchCriteria criteria) {
-        return List.of();
+    public List<City> findByCriteria(SearchCriteria<City> criteria) {
+        List<City> result = new ArrayList<>();
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.getConnection();
+            try(PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT name, temperature FROM city WHERE " + criteria.toSqlClause()
+            )) {
+                List<Object> params = criteria.getParameters();
+                for (int i = 0; i < params.size(); ++i) {
+                    preparedStatement.setObject(i + 1, params.get(i));
+                }
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    result.add(new City(
+                            resultSet.getString("name"),
+                            resultSet.getInt("temperature")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return result;
     }
 
     @Override
@@ -113,6 +140,7 @@ public class JdbcCityRepository implements CityRepository {
 
     @Override
     public boolean existsByName(String name) {
+        ResultSet resultSet;
         Connection connection = null;
         try {
             connection = DatabaseConnection.getConnection();
@@ -120,13 +148,13 @@ public class JdbcCityRepository implements CityRepository {
                  "SELECT id FROM city WHERE name=?"
             )) {
                 preparedStatement.setString(1, name);
-                ResultSet resultSet = preparedStatement.getResultSet();
-                return resultSet != null;
+                resultSet = preparedStatement.getResultSet();
             }
         } catch(SQLException e) {
             throw new DataAccessException(e.getMessage());
         } finally {
             DatabaseConnection.closeConnection(connection);
         }
+        return resultSet != null;
     }
 }

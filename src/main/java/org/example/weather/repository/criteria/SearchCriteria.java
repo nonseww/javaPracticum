@@ -1,8 +1,10 @@
 package org.example.weather.repository.criteria;
 
-import org.example.weather.domain.City;
+import java.util.List;
 
-@FunctionalInterface
-public interface SearchCriteria {
-    boolean test(City city);
+public interface SearchCriteria<T> {
+    boolean test(T item);
+
+    String toSqlClause();
+    List<Object> getParameters();
 }
