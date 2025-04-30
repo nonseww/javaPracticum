@@ -6,6 +6,8 @@ import org.example.weather.exception.command.ZeroArgumentsException;
 import org.example.weather.service.CityService;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
+
 public class RemoveCommand implements Command {
     private final CityService cityService;
     private final Printer printer;
@@ -16,7 +18,7 @@ public class RemoveCommand implements Command {
     }
 
     @Override
-    public void execute(String @NotNull [] args) {
+    public void execute(String @NotNull [] args) throws SQLException {
         if (args.length == 0 || args[0].isBlank())
             throw new ZeroArgumentsException();
         int countBefore = cityService.getCount();

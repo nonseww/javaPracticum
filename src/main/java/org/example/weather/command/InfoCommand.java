@@ -10,7 +10,6 @@ import org.example.weather.repository.specification.OrSpecification;
 import org.example.weather.service.CityService;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,14 +31,14 @@ public class InfoCommand implements Command {
 
     @Override
     public void execute(String @NotNull [] args) {
-        List<City> response = List.of();
+        List<City> response;
         if (args.length > 0 && !args[0].isBlank()) { // аргументы есть
             SearchCriteria searchCriteria = null;
             if (Objects.equals(args[0].toLowerCase(), "ровно")
                     || Objects.equals(args[0].toLowerCase(), "выше")
                     || Objects.equals(args[0].toLowerCase(), "ниже")
-                    || Objects.equals(args[0].toLowerCase(), "выше/равно")
-                    || Objects.equals(args[0].toLowerCase(), "ниже/равно")) {
+                    || Objects.equals(args[0].toLowerCase(), "выше/ровно")
+                    || Objects.equals(args[0].toLowerCase(), "ниже/ровно")) {
                 // поиск по температуре
                 if (args.length > 2) // слишком много аргументов
                     throw new TooManyArgumentsException();
@@ -53,12 +52,12 @@ public class InfoCommand implements Command {
                     case "ровно" -> searchCriteria = new TemperatureEqualSearch(temp);
                     case "ниже" -> searchCriteria = new TemperatureBelowSearch(temp);
                     case "выше" -> searchCriteria = new TemperatureAboveSearch(temp);
-                    case "ниже/равно" -> {
+                    case "ниже/ровно" -> {
                         SearchCriteria belowCriteria = new TemperatureBelowSearch(temp);
                         SearchCriteria equalCriteria = new TemperatureEqualSearch(temp);
                         searchCriteria = new OrSpecification(belowCriteria, equalCriteria);
                     }
-                    case "выше/равно" -> {
+                    case "выше/ровно" -> {
                         SearchCriteria aboveCriteria = new TemperatureAboveSearch(temp);
                         SearchCriteria equalCriteria = new TemperatureEqualSearch(temp);
                         searchCriteria = new OrSpecification(aboveCriteria, equalCriteria);

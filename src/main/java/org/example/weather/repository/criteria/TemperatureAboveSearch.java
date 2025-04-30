@@ -2,7 +2,9 @@ package org.example.weather.repository.criteria;
 
 import org.example.weather.domain.City;
 
-public class TemperatureAboveSearch implements SearchCriteria{
+import java.util.List;
+
+public class TemperatureAboveSearch implements SearchCriteria<City>{
     private final int temperature;
 
     public TemperatureAboveSearch(int temperature) {
@@ -12,5 +14,15 @@ public class TemperatureAboveSearch implements SearchCriteria{
     @Override
     public boolean test(City city) {
         return city.getTemperature() > temperature;
+    }
+
+    @Override
+    public String toSqlClause() {
+        return "temperature > ?";
+    }
+
+    @Override
+    public List<Object> getParameters() {
+        return List.of(temperature);
     }
 }

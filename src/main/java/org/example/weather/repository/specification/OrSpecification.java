@@ -3,11 +3,14 @@ package org.example.weather.repository.specification;
 import org.example.weather.domain.City;
 import org.example.weather.repository.criteria.SearchCriteria;
 
-public class OrSpecification implements SearchCriteria {
-    private final SearchCriteria left;
-    private final SearchCriteria right;
+import java.util.ArrayList;
+import java.util.List;
 
-    public OrSpecification(SearchCriteria left, SearchCriteria right) {
+public class OrSpecification implements SearchCriteria<City> {
+    private final SearchCriteria<City> left;
+    private final SearchCriteria<City> right;
+
+    public OrSpecification(SearchCriteria<City> left, SearchCriteria<City> right) {
         this.left = left;
         this.right = right;
     }
@@ -15,5 +18,18 @@ public class OrSpecification implements SearchCriteria {
     @Override
     public boolean test(City city) {
         return left.test(city) || right.test(city);
+    }
+
+    @Override
+    public String toSqlClause() {
+        return "(" + left.toSqlClause() + " OR " + right.toSqlClause() + ")";
+    }
+
+    @Override
+    public List<Object> getParameters() {
+        List<Object> params = new ArrayList<>();
+        params.addAll(left.getParameters());
+        params.addAll(right.getParameters());
+        return params;
     }
 }

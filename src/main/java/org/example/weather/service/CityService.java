@@ -1,49 +1,21 @@
 package org.example.weather.service;
 
 import org.example.weather.domain.City;
-import org.example.weather.domain.factory.CityFactory;
-import org.example.weather.repository.CityRepository;
 import org.example.weather.repository.criteria.SearchCriteria;
 
-import java.util.Arrays;
+import java.sql.SQLException;
 import java.util.List;
 
-public class CityService {
-    private final CityRepository cityRepository;
-    private final CityFactory cityFactory;
+public interface CityService {
+    void addCities(String[] names);
 
-    public CityService(CityRepository cityRepository,
-                       CityFactory cityFactory) {
-        this.cityRepository = cityRepository;
-        this.cityFactory = cityFactory;
-    }
+    void removeCities(String[] names);
 
-    public void addCities(String[] names) {
-        Arrays.stream(names)
-                .forEach(name -> {
-                    City city = cityFactory.createCity(name);
-                    cityRepository.add(city);
-                });
-    }
+    int getCount() throws SQLException;
 
-    public void removeCities(String[] names) {
-        Arrays.stream(names)
-                        .forEach(cityRepository::remove);
-    }
+    public List<City> getAllCities();
 
-    public int getCount() {
-        return cityRepository.count();
-    }
+    public List<City> findCitiesByCriteria(SearchCriteria searchCriteria);
 
-    public List<City> getAllCities() {
-        return cityRepository.getAllCities();
-    }
-
-    public List<City> findCitiesByCriteria(SearchCriteria searchCriteria) {
-        return cityRepository.findByCriteria(searchCriteria);
-    }
-
-    public void clear() {
-        cityRepository.clear();
-    }
+    void clear();
 }
