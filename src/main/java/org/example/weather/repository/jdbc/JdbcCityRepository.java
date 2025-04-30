@@ -2,6 +2,7 @@ package org.example.weather.repository.jdbc;
 
 import org.example.weather.domain.City;
 import org.example.weather.exception.jdbc.DataAccessException;
+import org.example.weather.exception.jdbc.DuplicateCityException;
 import org.example.weather.repository.CityRepository;
 import org.example.weather.repository.criteria.SearchCriteria;
 import org.example.weather.utils.DatabaseConnection;
@@ -23,8 +24,12 @@ public class JdbcCityRepository implements CityRepository {
                 preparedStatement.setInt(2, city.getTemperature());
                 preparedStatement.executeUpdate();
             }
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
+        }
+        catch (SQLException e) {
+            if ("23505".equals(e.getSQLState()))
+                throw new DuplicateCityException(city.getName());
+            else
+                throw new DataAccessException("Ошибка добавления города, " + e.getMessage());
         } finally {
             DatabaseConnection.closeConnection(connection);
         }
@@ -36,7 +41,7 @@ public class JdbcCityRepository implements CityRepository {
         try {
             connection = DatabaseConnection.getConnection();
             try (PreparedStatement preparedStatement = connection.prepareStatement(
-                    "DELETE FROM city WHERE name=?"
+                    "DELETE FROM city WHERE LOWER(name)=?"
             )) {
                 preparedStatement.setString(1, name);
                 preparedStatement.executeUpdate();
@@ -82,8 +87,27 @@ public class JdbcCityRepository implements CityRepository {
     }
 
     @Override
-    public int count() {
-        return 0;
+    public int count() throws SQLException {
+        Connection connection = null;
+        ResultSet resultSet;
+        int count = 0;
+        try {
+            connection = DatabaseConnection.getConnection();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT COUNT(*) AS total FROM city"
+            )) {
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    count =  resultSet.getInt("total");
+                }
+            }
+        }  catch (SQLException e) {
+            throw new DataAccessException("Ошибка получения количества записей, " + e.getMessage());
+        }
+        finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return count;
     }
 
     @Override

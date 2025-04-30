@@ -5,6 +5,8 @@ import org.example.weather.command.factory.CommandFactory;
 import org.example.weather.exception.command.CommandNotFoundException;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
+
 public class CommandProcessor {
     private final CommandFactory commandFactory;
 
@@ -12,7 +14,8 @@ public class CommandProcessor {
         this.commandFactory = commandFactory;
     }
 
-    public void process(@NotNull String fullCommand) {
+    public void process(@NotNull String fullCommand) throws SQLException {
+        fullCommand = fullCommand.toLowerCase();
         String[] parts = fullCommand.split("\\s+", 2);
         String commandName = parts[0];
         String[] arguments = parts.length > 1 ? parts[1].split("\\s+") : new String[]{""};

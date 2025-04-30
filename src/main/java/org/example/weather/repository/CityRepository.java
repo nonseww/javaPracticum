@@ -11,7 +11,7 @@ public interface CityRepository {
     void remove(String name) throws SQLException;
     void clear();
     boolean isEmpty();
-    int count();
+    int count() throws SQLException;
     List<City> findByCriteria(SearchCriteria<City> criteria);
     List<City> getAllCities();
     boolean existsByName(String name);

@@ -2,6 +2,8 @@ package org.example.weather.service;
 
 import org.example.weather.domain.City;
 import org.example.weather.repository.criteria.SearchCriteria;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface CityService {
@@ -9,7 +11,7 @@ public interface CityService {
 
     void removeCities(String[] names);
 
-    int getCount();
+    int getCount() throws SQLException;
 
     public List<City> getAllCities();
 

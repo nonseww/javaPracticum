@@ -2,6 +2,7 @@ package org.example.weather.service.jdbc;
 
 import org.example.weather.domain.City;
 import org.example.weather.domain.factory.CityFactory;
+import org.example.weather.exception.jdbc.JdbcException;
 import org.example.weather.repository.criteria.SearchCriteria;
 import org.example.weather.repository.jdbc.JdbcCityRepository;
 import org.example.weather.service.CityService;
@@ -27,7 +28,7 @@ public class JdbcCityService implements CityService {
                     try {
                         cityRepository.add(city);
                     } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                        throw new JdbcException(e.getMessage());
                     }
                 });
     }
@@ -37,7 +38,7 @@ public class JdbcCityService implements CityService {
                 .forEach(cityRepository::remove);
     }
 
-    public int getCount() {
+    public int getCount() throws SQLException {
         return cityRepository.count();
     }
 
